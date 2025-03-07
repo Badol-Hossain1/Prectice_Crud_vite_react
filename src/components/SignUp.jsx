@@ -1,7 +1,6 @@
 import { Link } from 'react-router'
 import { AuthContext } from '../provider/AuthProvider'
 import { useContext } from 'react'
-import Swal from 'sweetalert2'
 
 const SignUp = () => {
     const { createUser } = useContext(AuthContext)
@@ -11,22 +10,28 @@ const SignUp = () => {
         const name = Form.get('name')
         const email = Form.get('email')
         const pass = Form.get('password')
-        // const result = { name, email, pass }
+        const detail = Form.get('details')
+        const userData = { name, email, detail }
         createUser(email, pass)
             .then((res) => {
-                console.log('🚀 ~ handleSignUp ~ res:', res)
-                if (res?.user?.email) {
-                    Swal.fire({
-                        title: 'successfully Created the user ',
-
-                        icon: 'success',
-                        confirmButtonText: 'done ',
+                console.log(res)
+                fetch('http://localhost:5000/users', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                    },
+                    body: JSON.stringify(userData),
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data)
                     })
-                }
+
+                    .catch((error) => {
+                        console.log('🚀 ~ handleSignUp ~ error:', error)
+                    })
             })
-            .catch((error) => {
-                console.log('🚀 ~ handleSignUp ~ error:', error)
-            })
+            .then((err) => console.log(err))
     }
     return (
         <div>
@@ -35,6 +40,9 @@ const SignUp = () => {
                     <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
                         <div className="text-center ">
                             <h1 className="text-4xl font-bold">SignUp now!</h1>
+                            <Link className="text-yellow-300 mt-8" to="/">
+                                Home
+                            </Link>
                         </div>
                         <form onSubmit={handleSignUp} className="card-body">
                             <fieldset className="fieldset">
@@ -44,6 +52,15 @@ const SignUp = () => {
                                     type="text"
                                     className="input"
                                     placeholder="name"
+                                />
+                                <label className="fieldset-label">
+                                    details
+                                </label>
+                                <input
+                                    name="details"
+                                    type="text"
+                                    className="input"
+                                    placeholder="details"
                                 />
                                 <label className="fieldset-label">Email</label>
                                 <input

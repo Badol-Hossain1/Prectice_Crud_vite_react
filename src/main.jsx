@@ -6,11 +6,13 @@ import { createBrowserRouter, RouterProvider } from 'react-router'
 import Login from './components/Login.jsx'
 import SignUp from './components/SignUp.jsx'
 import AuthProvider from './provider/AuthProvider.jsx'
+import OnePage from './components/OnePage.jsx'
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <App></App>,
+        loader: () => fetch('http://localhost:5000/users'),
     },
     {
         path: '/login',
@@ -19,6 +21,11 @@ const router = createBrowserRouter([
     {
         path: '/signup',
         element: <SignUp></SignUp>,
+    },
+    {
+        path: `/user/:id`,
+        element: <OnePage></OnePage>,
+        loader: ({params})=> fetch(`http://localhost:5000/user/${params.id}`)
     },
 ])
 
