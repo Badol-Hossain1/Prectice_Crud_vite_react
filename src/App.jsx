@@ -1,9 +1,22 @@
 import { Link, Outlet, useLoaderData } from 'react-router'
 import './App.css'
+import { useState } from 'react'
 
 function App() {
-    const datas = useLoaderData()
-    console.log('🚀 ~ App ~ datas:', datas)
+    const UserData = useLoaderData()
+    const [datas, setDatas] = useState(UserData)
+    const handleDelete = (id) => {
+        fetch(`http://localhost:5000/delete/${id}`, {
+            method: 'DELETE',
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data)
+                const updatedData = datas.filter((data) => data._id !== id)
+                setDatas(updatedData)
+            })
+    }
+
     return (
         <>
             <ul className="list bg-base-100 rounded-box shadow-md">
@@ -29,15 +42,23 @@ function App() {
                             </div>
                         </div>
 
-                        <Link className="text-fuchsia-400" to={`/user/${data?._id}`}>
+                        <Link
+                            className="text-fuchsia-400"
+                            to={`/user/${data?._id}`}
+                        >
                             details
                         </Link>
-
-                        <Link className="text-fuchsia-400" to={data._id}>
-                            edit{' '}
+                        <Link
+                            className="text-fuchsia-400"
+                            to={`/update/${data?._id}`}
+                        >
+                            edit
                         </Link>
 
-                        <Link className="text-fuchsia-400" to={data._id}>
+                        <Link
+                            className="text-fuchsia-400"
+                            onClick={() => handleDelete(data._id)}
+                        >
                             delete
                         </Link>
                     </li>
