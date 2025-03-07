@@ -30,7 +30,7 @@ const Update = () => {
                 <div className="hero-content flex-col lg:flex-row-reverse">
                     <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
                         <div className="text-center ">
-                            <h1 className="text-4xl font-bold">Login now!</h1>
+                            <h1 className="text-4xl font-bold">update now!</h1>
                         </div>
                         <form onSubmit={handleUpdate} className="card-body">
                             <fieldset className="fieldset">

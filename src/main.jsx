@@ -8,6 +8,7 @@ import SignUp from './components/SignUp.jsx'
 import AuthProvider from './provider/AuthProvider.jsx'
 import OnePage from './components/OnePage.jsx'
 import Update from './components/Update.jsx'
+import PrivateRoute from './private/PrivateRoute.jsx'
 
 const router = createBrowserRouter([
     {
@@ -26,13 +27,19 @@ const router = createBrowserRouter([
     {
         path: `/user/:id`,
         element: <OnePage></OnePage>,
-        loader: ({params})=> fetch(`http://localhost:5000/user/${params.id}`)
+        loader: ({ params }) =>
+            fetch(`http://localhost:5000/user/${params.id}`),
     },
     {
-        path:`/update/:id`,
-        element:<Update></Update>,
-        loader: ({params})=> fetch(`http://localhost:5000/update/${params.id}`)
-    }
+        path: `/update/:id`,
+        element: (
+            <PrivateRoute>
+                <Update></Update>
+            </PrivateRoute>
+        ),
+        loader: ({ params }) =>
+            fetch(`http://localhost:5000/update/${params.id}`),
+    },
 ])
 
 createRoot(document.getElementById('root')).render(
